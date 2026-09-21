@@ -16,23 +16,24 @@ public class SecurityConfig {
             ServerHttpSecurity http) {
 
         return http
-
-                // JWT-based REST API does not use CSRF tokens
+                // JWT REST API does not use CSRF
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
 
-                // Authorization rules
+                // Disable browser/basic authentication
+                .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
+
+                // Disable form login
+                .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
+
+                /*
+                 * GatewayJwtFilter is responsible for checking
+                 * whether a JWT exists and is valid.
+                 *
+                 * The actual user authorization is handled
+                 * by the downstream microservices.
+                 */
                 .authorizeExchange(exchange -> exchange
-
-                        // Public endpoints
-                        .pathMatchers(
-                                "/",
-                                "/auth/login",
-                                "/auth/register",
-                                "/actuator/health"
-                        ).permitAll()
-
-                        // Everything else requires authentication
-                        .anyExchange().authenticated()
+                        .anyExchange().permitAll()
                 )
 
                 .build();
