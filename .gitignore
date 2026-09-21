@@ -1,0 +1,31 @@
+target/
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+.vscode/
+*.log
+.env
+.DS_Store
+# Eclipse / Spring Tool Suite
+.metadata/
+.settings/
+.classpath
+.project
+
+# Build output
+target/
+bin/
+
+# Environment / secrets
+.env
+*.env
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db

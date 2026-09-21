@@ -1,0 +1,46 @@
+package com.eduassess.security;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
+import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
+import java.util.Date;
+import java.util.Map;
+
+public class JwtService {
+    private final SecretKey key;
+    private final long expirationMs;
+
+    public JwtService(String secret, long expirationMs) {
+        if (secret == null || secret.length() < 32) {
+            throw new IllegalArgumentException("JWT_SECRET must contain at least 32 characters");
+        }
+        this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+        this.expirationMs = expirationMs;
+    }
+
+    public String generateToken(String userId, String email, String role) {
+        Date now = new Date();
+        return Jwts.builder()
+                .claims(Map.of("userId", userId, "email", email, "role", role))
+                .subject(email)
+                .issuedAt(now)
+                .expiration(new Date(now.getTime() + expirationMs))
+                .signWith(key)
+                .compact();
+    }
+
+    public Claims parse(String token) {
+        return Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload();
+    }
+
+    public boolean isValid(String token) {
+        try {
+            parse(token);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+}

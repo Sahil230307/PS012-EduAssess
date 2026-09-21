@@ -1,0 +1,113 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: eduassess-postgres
+    environment:
+      POSTGRES_DB: eduassess
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
+
+  eureka-server:
+    build:
+      context: .
+      dockerfile: eureka-server/Dockerfile
+    container_name: eduassess-eureka
+    ports:
+      - "8761:8761"
+    depends_on:
+      - postgres
+
+  auth-service:
+    build:
+      context: .
+      dockerfile: auth-service/Dockerfile
+    container_name: eduassess-auth
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: eduassess
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      EUREKA_URL: http://eureka-server:8761/eureka/
+      JWT_SECRET: ${JWT_SECRET:-EduAssessSuperSecretKeyForDevelopmentOnly2026}
+    depends_on:
+      - postgres
+      - eureka-server
+
+  exam-service:
+    build:
+      context: .
+      dockerfile: exam-service/Dockerfile
+    container_name: eduassess-exam
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: eduassess
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      EUREKA_URL: http://eureka-server:8761/eureka/
+      JWT_SECRET: ${JWT_SECRET:-EduAssessSuperSecretKeyForDevelopmentOnly2026}
+    depends_on:
+      - postgres
+      - eureka-server
+
+  submission-service:
+    build:
+      context: .
+      dockerfile: submission-service/Dockerfile
+    container_name: eduassess-submission
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: eduassess
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      EUREKA_URL: http://eureka-server:8761/eureka/
+      JWT_SECRET: ${JWT_SECRET:-EduAssessSuperSecretKeyForDevelopmentOnly2026}
+    depends_on:
+      - postgres
+      - eureka-server
+      - exam-service
+      - evaluation-service
+
+  evaluation-service:
+    build:
+      context: .
+      dockerfile: evaluation-service/Dockerfile
+    container_name: eduassess-evaluation
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: eduassess
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      EUREKA_URL: http://eureka-server:8761/eureka/
+      JWT_SECRET: ${JWT_SECRET:-EduAssessSuperSecretKeyForDevelopmentOnly2026}
+    depends_on:
+      - postgres
+      - eureka-server
+
+  api-gateway:
+    build:
+      context: .
+      dockerfile: api-gateway/Dockerfile
+    container_name: eduassess-gateway
+    environment:
+      JWT_SECRET: ${JWT_SECRET:-EduAssessSuperSecretKeyForDevelopmentOnly2026}
+      EUREKA_URL: http://eureka-server:8761/eureka/
+    ports:
+      - "8080:8080"
+    depends_on:
+      - eureka-server
+      - auth-service
+      - exam-service
+      - submission-service
+      - evaluation-service
+
+volumes:
+  postgres_data:

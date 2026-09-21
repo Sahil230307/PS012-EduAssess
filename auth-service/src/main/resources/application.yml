@@ -1,0 +1,38 @@
+server:
+  port: 8081
+spring:
+  sql:
+    init:
+      mode: always
+  application:
+    name: AUTH-SERVICE
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:eduassess}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:Sahil2337@!?}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        default_schema: auth_schema
+    open-in-view: false
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka/}
+    register-with-eureka: true
+    fetch-registry: true
+    jersey:
+      enabled: false
+    webclient:
+      enabled: false
+security:
+  jwt:
+    secret: ${JWT_SECRET:EduAssessSuperSecretKeyForDevelopmentOnly2026}
+    expiration-ms: ${JWT_EXPIRATION_MS:3600000}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

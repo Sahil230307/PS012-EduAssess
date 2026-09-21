@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EduAssess Global</title>
+  <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+<header><h1>EduAssess Global</h1><span>Distributed Online Examination & Automated Evaluation Engine</span></header>
+<main>
+  <section id="authCard" class="card">
+    <h2>Login</h2>
+    <div class="grid">
+      <input id="email" placeholder="Email" value="student@eduassess.com">
+      <input id="password" type="password" placeholder="Password" value="Student@123">
+    </div>
+    <button onclick="login()">Login</button>
+    <p class="hint">Demo admin: admin@eduassess.com / Admin@123</p>
+    <p id="authMsg"></p>
+  </section>
+
+  <section id="app" hidden>
+    <div class="toolbar">
+      <strong id="userInfo"></strong>
+      <button onclick="logout()">Logout</button>
+    </div>
+
+    <section id="studentPanel" class="card" hidden>
+      <h2>Available Exams</h2>
+      <button onclick="loadExams()">Refresh Exams</button>
+      <div id="examList"></div>
+      <div id="examArea"></div>
+    </section>
+
+    <section id="adminPanel" class="card" hidden>
+      <h2>Admin Console</h2>
+      <h3>Create Exam</h3>
+      <div class="grid">
+        <input id="examTitle" placeholder="Exam title">
+        <input id="examDuration" type="number" min="1" value="30" placeholder="Duration (minutes)">
+        <input id="examStart" type="datetime-local">
+      </div>
+      <textarea id="examDescription" placeholder="Description"></textarea>
+      <button onclick="createExam()">Create Draft</button>
+      <div id="adminExamList"></div>
+
+      <h3>Add Question</h3>
+      <div class="grid">
+        <input id="questionExamId" placeholder="Exam ID">
+        <input id="qMarks" type="number" min="1" value="1">
+        <input id="qCorrect" maxlength="1" placeholder="Correct: A/B/C/D">
+      </div>
+      <textarea id="qText" placeholder="Question"></textarea>
+      <div class="grid">
+        <input id="optA" placeholder="Option A"><input id="optB" placeholder="Option B">
+        <input id="optC" placeholder="Option C"><input id="optD" placeholder="Option D">
+      </div>
+      <button onclick="addQuestion()">Add Question</button>
+      <div id="adminMsg"></div>
+      <h3>Monitor Results</h3>
+      <div class="grid"><input id="monitorExamId" placeholder="Exam ID"><button onclick="monitorResults()">Load Results</button></div>
+      <pre id="results"></pre>
+    </section>
+  </section>
+</main>
+<script src="/js/app.js"></script>
+</body>
+</html>

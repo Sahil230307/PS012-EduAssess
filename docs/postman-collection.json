@@ -1,0 +1,259 @@
+{
+  "info": {
+    "name": "PS012 EduAssess API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "examId",
+      "value": ""
+    },
+    {
+      "key": "submissionId",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Admin Login",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"email\":\"admin@eduassess.com\",\"password\":\"Admin@123\"}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/auth/login",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "auth",
+            "login"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Create Exam",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"title\":\"Java Microservices Assessment\",\"description\":\"PS012 demo examination\",\"durationMinutes\":30,\"startTime\":\"2026-01-01T00:00:00Z\"}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/exams",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "exams"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Add Question",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"questionText\":\"Which framework is used for Java microservices?\",\"optionA\":\"Spring Boot\",\"optionB\":\"Django\",\"optionC\":\"Laravel\",\"optionD\":\"Rails\",\"correctOption\":\"A\",\"marks\":2}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/exams/{{examId}}/questions",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "exams",
+            "{{examId}}",
+            "questions"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Publish Exam",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/exams/{{examId}}/publish",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "exams",
+            "{{examId}}",
+            "publish"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Student Login",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"email\":\"student@eduassess.com\",\"password\":\"Student@123\"}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/auth/login",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "auth",
+            "login"
+          ]
+        }
+      }
+    },
+    {
+      "name": "List Published Exams",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/exams",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "exams"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Start Exam",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/submissions/exams/{{examId}}/start",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "submissions",
+            "exams",
+            "{{examId}}",
+            "start"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Submit Exam",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"answers\":[{\"questionId\":1,\"selectedOption\":\"A\"}]}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/submissions/{{submissionId}}/submit",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "submissions",
+            "{{submissionId}}",
+            "submit"
+          ]
+        }
+      }
+    },
+    {
+      "name": "My Results",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/evaluations/mine",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "evaluations",
+            "mine"
+          ]
+        }
+      }
+    }
+  ]
+}

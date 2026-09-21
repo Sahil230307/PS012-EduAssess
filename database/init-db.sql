@@ -1,0 +1,4 @@
+CREATE SCHEMA IF NOT EXISTS auth_schema;
+CREATE SCHEMA IF NOT EXISTS exam_schema;
+CREATE SCHEMA IF NOT EXISTS submission_schema;
+CREATE SCHEMA IF NOT EXISTS evaluation_schema;
