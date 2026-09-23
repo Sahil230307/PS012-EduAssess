@@ -12,8 +12,14 @@ public class ExamController {
     private final ExamService service;
     public ExamController(ExamService service){this.service=service;}
 
-    @GetMapping public List<ExamResponse> published(){return service.listPublished();}
-    @GetMapping("/all") @PreAuthorize("hasRole('ADMIN')") public List<ExamResponse> all(){return service.listAll();}
+    @GetMapping public List<ExamResponse> published(){
+    	
+    	return service.listPublished();
+    	}
+    
+    @GetMapping("/all") @PreAuthorize("hasRole('ADMIN')") public List<ExamResponse> all(){
+    	return service.listAll();
+    	}
     @GetMapping("/{id}") public ExamResponse get(@PathVariable Long id){return service.get(id);}
     @GetMapping("/{id}/questions") public List<QuestionResponse> questions(@PathVariable Long id){return service.publicQuestions(id);}
 
